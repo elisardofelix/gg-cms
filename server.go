@@ -1,9 +1,13 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"os"
+)
 
 func main() {
 	server := gin.Default()
+	port := os.Getenv("PORT")
 	initializeRoutes(server)
-	server.Run(":8000")
+	server.Run(":" + port)
 }

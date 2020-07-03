@@ -1,5 +1,12 @@
 package DB
 
+import "os"
+
+var dbConnStr = os.Getenv("GGCMSDBString")
+var dbProd = os.Getenv("GGCMSDBProd")
+var dbTest = os.Getenv("GGCMSDBTest")
+
+
 type conf struct {
 	connectionString string
 	DataBase string
@@ -7,7 +14,7 @@ type conf struct {
 }
 
 var Conf = conf{
-	connectionString: "mongodb://192.168.50.15:27017",
-	DataBase: "test",
-	TestDataBase: "test2",
+	connectionString: dbConnStr,
+	DataBase: dbProd,
+	TestDataBase: dbTest,
 }
