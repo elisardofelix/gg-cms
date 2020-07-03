@@ -130,7 +130,7 @@ func (pr *postRepo) Get(permaLink string) (Models.Post, error) {
 
 
 func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64) ([]Models.Post, error) {
-	var results []Models.Post
+	var results = make([]Models.Post,0)
 	collection := pr.client.Database(pr.dbName).Collection(pr.colletionName)
 
 	// Pass these options to the Find method
