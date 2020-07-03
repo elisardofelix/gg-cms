@@ -1,1 +1,1 @@
-web: bin/ggcms
+web: bin/gg-cms
