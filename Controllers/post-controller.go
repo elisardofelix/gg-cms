@@ -60,6 +60,7 @@ func (pc *postController) SavePost(ctx *gin.Context) {
 			"error" : err.Error(),
 		})
 	} else {
+		post.Status = "Active"
 		post.CreatedDate = time.Now()
 		cClaims, _ := ctx.Get("jwtClaims")
 		tokenClaims := cClaims.(jwt.MapClaims)

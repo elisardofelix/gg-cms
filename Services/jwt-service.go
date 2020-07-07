@@ -1,10 +1,10 @@
 package Services
 
 import (
-"fmt"
+	"fmt"
 	"os"
 	"time"
-"github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go"
 )
 
 // TODO: Enable customization of Claims and Signing Method.
@@ -35,7 +35,7 @@ func NewJWTService() JWTService {
 func getSecretKey() string {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
-		secret = "s2ec$re5t"
+		return "s2ec$re5t"
 	}
 	return secret
 }

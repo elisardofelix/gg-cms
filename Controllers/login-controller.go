@@ -29,10 +29,10 @@ func (controller *loginController) Login(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(401, nil)
 	} else {
-		isAuthenticated := controller.loginService.Login(credentials.Username, credentials.Password)
+		isAuthenticated, isAdmin := controller.loginService.Login(credentials.UserName, credentials.Password)
 		if isAuthenticated {
 			ctx.JSON(200, gin.H{
-				"token" : controller.jWtService.GenerateToken(credentials.Username, true),
+				"token" : controller.jWtService.GenerateToken(credentials.UserName, isAdmin),
 
 			})
 		} else {

@@ -1,8 +1,8 @@
 package DataRepos
 
 import (
-	"context"
 	"fmt"
+	"context"
 	"gg-cms/DB"
 	"gg-cms/Models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -10,9 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-
-
 
 type PostRepo interface {
 	Insert(post Models.Post) (Models.Post, error)
