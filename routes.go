@@ -12,12 +12,15 @@ import (
 
 var (
 	dbPostRepo = DataRepos.NewPostRepo()
+	dbUserRepo = DataRepos.NewUserRepo()
 
 	postService  = Services.NewPostService(dbPostRepo)
-	loginService = Services.NewLoginService()
+	userService  = Services.NewUserService(dbUserRepo)
+	loginService = Services.NewLoginService(dbUserRepo)
 	jwtService   = Services.NewJWTService()
 
 	postController  = Controllers.NewPostController(postService)
+	userController  = Controllers.NewUserController(userService)
 	loginController = Controllers.NewLoginController(loginService, jwtService)
 )
 
@@ -57,16 +60,27 @@ func initializeRoutes(router *gin.Engine) {
 		articleRoutes.DELETE("/post/:id", Middlewares.AuthorizeJWT(), postController.DeletePost)
 	}
 
+	userRoutes := router.Group("/user", Middlewares.AuthorizeJWTAdmin())
+	{
+		userRoutes.GET("/", userController.FindAllUsers)
+		userRoutes.GET("/:username", userController.FindUser)
+		userRoutes.POST("/", userController.SaveUser)
+		userRoutes.PATCH("/", userController.UpdateUser)
+		userRoutes.DELETE("/:id", userController.DeleteUser)
+	}
+
 
 	// Group user related routes together
-	userRoutes := router.Group("/user")
+	loginRoutes := router.Group("/login")
 	{
-		userRoutes.POST("/login", loginController.Login)
-		userRoutes.POST("/register", func(ctx *gin.Context){
+		loginRoutes.POST("/auth", loginController.Login)
+		loginRoutes.POST("/register", func(ctx *gin.Context){
 			ctx.JSON(500, gin.H {
 				"error" : "Register not implemented",
 			})
 		})
 
 	}
+
+
 }

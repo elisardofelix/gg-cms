@@ -16,7 +16,7 @@ var _ = Describe("Json Web Token (JWT) Service", func() {
 		jwtService = NewJWTService()
 	})
 
-	Describe("Validating token validation and data extraction", func() {
+	Describe("Validating signed token and data extraction", func() {
 
 		Context("If the token is successfully validated", func() {
 
