@@ -1,6 +1,6 @@
 gg-cms
 
-##What is GG-CMS?
+## What is GG-CMS?
 GG-CMS (GoGo-Content Management System) is a content management system in short, allows you to create your own blog and manage your own content.
 
 Right now is early stage, but the plan is to add more features in futures versions
@@ -15,7 +15,7 @@ Here is a list of the features in the current version **V0.1**:
 
 [gg-cms-front-end](https://github.com/elisardofelix/gg-cms-front-end/blob/master)
 
-##Implementation GG-CMS
+## Implementation GG-CMS
 For implementing this back-end you need to have the following considerations:
 * All the configuration is via Environment variables which mean you need to setup first:
     * `PORT` : Is optional becuse the mayor part of the server implementation use that variable to set the port automatically
@@ -26,17 +26,17 @@ For implementing this back-end you need to have the following considerations:
     * `ESPECIAL_USER` : Is a user that going to work only if you not have any user in the database. Example of how to setup:
         * `[username]:[password]`
 
-###How to set Environment Variables in Windows
+### How to set Environment Variables in Windows
 In Windows, you only need to set each variable enter the following command in the command prompt before to run the application `set [VariableName]=[Value]` if you want to know more about it below is a link with an article explaining it:
 
 [Article Link](https://ss64.com/nt/set.html)
 
-###How to set Environment Variables in Windows
+### How to set Environment Variables in Windows
 In Linux, you only need to set each variable enter the following command in the terminal before to run the application `export [VariableName]=[Value]` if you want to know more about it below is a link with an article explaining it:
 
 [Article Link](https://www.cyberciti.biz/faq/set-environment-variable-linux/)
 
-###How to run tests and app
+### How to run tests and app
 Jus apply the following commands line by line:
 
 ```
@@ -50,7 +50,7 @@ go test ./...
 go run .
 ```
 
-##Contributions
+## Contributions
 If you have any improve proposal to the code, please no doubt of sending me your pull request and I check to apply in the repository as soon as possible.
 
 Please feel free to contact  me 😊: [elisardofelix@gmail.com](mailto:elisardofelix@gmail.com)
