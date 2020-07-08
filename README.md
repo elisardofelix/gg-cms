@@ -1,5 +1,3 @@
-gg-cms
-
 ## What is GG-CMS?
 GG-CMS (GoGo-Content Management System) is a content management system in short, allows you to create your own blog and manage your own content.
 

@@ -10,7 +10,7 @@ type PostService interface {
 	Update(Models.Post) (Models.Post, error)
 	Delete(ID string) error
 	Find(permaLink string) (Models.Post, error)
-	FindAll(limit int64, skip int64) ([]Models.Post, error)
+	FindAll(limit int64, skip int64, areActive bool) ([]Models.Post, error)
 }
 
 type postService struct {
@@ -43,7 +43,7 @@ func (service *postService) Find(permaLink string) (Models.Post, error) {
 	return newPost, err
 }
 
-func (service *postService) FindAll(limit int64, skip int64) ([]Models.Post, error) {
-	posts, err := service.postRepo.GetAllActive(limit, skip)
+func (service *postService) FindAll(limit int64, skip int64, areActive bool) ([]Models.Post, error) {
+	posts, err := service.postRepo.GetAllActive(limit, skip, areActive)
 	return posts, err
 }

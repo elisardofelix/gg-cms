@@ -6,6 +6,7 @@ import (
 	"gg-cms/Services"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"time"
 )
 
@@ -28,7 +29,14 @@ func NewUserController(service Services.UserService) UserController {
 }
 
 func (uc *userController) FindAllUsers(ctx *gin.Context) {
-	users, err := uc.service.FindAll(20, 0)
+	skip, _ :=  strconv.ParseInt(ctx.GetHeader("skip"), 10, 64)
+	limit, _ := strconv.ParseInt(ctx.GetHeader("limit"), 10, 64)
+
+	if limit == 0 {
+		limit = 20
+	}
+
+	users, err := uc.service.FindAll(limit, skip)
 
 	if err == nil {
 		ctx.JSON(200, users)

@@ -9,6 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"strings"
 )
 
 type PostRepo interface {
@@ -16,7 +17,7 @@ type PostRepo interface {
 	Update(post Models.Post) (Models.Post, error)
 	Delete(ID string) error
 	Get(permaLink string) (Models.Post, error)
-	GetAllActive(setLimit int64, setSkip int64) ([]Models.Post, error)
+	GetAllActive(setLimit int64, setSkip int64, areActive bool) ([]Models.Post, error)
 }
 
 type postRepo struct {
@@ -126,7 +127,7 @@ func (pr *postRepo) Get(permaLink string) (Models.Post, error) {
 }
 
 
-func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64) ([]Models.Post, error) {
+func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64, areActive bool) ([]Models.Post, error) {
 	var results = make([]Models.Post,0)
 	collection := pr.client.Database(pr.dbName).Collection(pr.colletionName)
 
@@ -136,8 +137,13 @@ func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64) ([]Models.Post, 
 	//findOptions.SetSort(map[string]int{"when": -1})
 	findOptions.SetSkip(setSkip)
 	findOptions.SetLimit(setLimit)
+	filter := bson.D{{}}
 
-	cur, err := collection.Find(context.TODO(), bson.D{{}}, findOptions)
+	if areActive {
+		filter = bson.D{{"status", "Active"}}
+	}
+
+	cur, err := collection.Find(context.TODO(), filter, findOptions)
 	if err != nil {
 		return results, err
 	}
@@ -150,8 +156,30 @@ func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64) ([]Models.Post, 
 			return results, err
 		}
 
+        elem.Content = getFirstElementString(elem.Content, "p")
 		results = append(results, elem)
 	}
 
 	return results, nil
+}
+
+func getFirstElementString(str string, elem string) string {
+	start := fmt.Sprintf("<%s>", elem)
+	end := fmt.Sprintf("</%s>", elem)
+
+	s := strings.Index(str, strings.ToLower(start))
+	e := strings.Index(str, strings.ToLower(end))
+
+	if s >= 0 && e > 0 {
+		return str[s : e+len(end)]
+	}
+
+	s = strings.Index(str, strings.ToUpper(start))
+	e = strings.Index(str, strings.ToUpper(end))
+
+	if s >= 0 && e > 0 {
+		return str[s : e+len(end)]
+	}
+
+	return str[:1000]
 }
