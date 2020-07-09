@@ -135,7 +135,7 @@ func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64, areActive bool) 
 	// Pass these options to the Find method
 	findOptions := options.Find()
 	//Example for Sorting
-	//findOptions.SetSort(map[string]int{"when": -1})
+	findOptions.SetSort(map[string]int{"createdDate": -1})
 	findOptions.SetSkip(setSkip)
 	findOptions.SetLimit(setLimit)
 	filter := bson.D{{}}
