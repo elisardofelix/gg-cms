@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"context"
 	"gg-cms/DB"
+	"gg-cms/DTOs"
 	"gg-cms/Models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"strings"
 )
 
 type PostRepo interface {
@@ -16,7 +18,7 @@ type PostRepo interface {
 	Update(post Models.Post) (Models.Post, error)
 	Delete(ID string) error
 	Get(permaLink string) (Models.Post, error)
-	GetAllActive(setLimit int64, setSkip int64) ([]Models.Post, error)
+	GetAllActive(setLimit int64, setSkip int64, areActive bool) (DTOs.Posts, error)
 }
 
 type postRepo struct {
@@ -126,7 +128,7 @@ func (pr *postRepo) Get(permaLink string) (Models.Post, error) {
 }
 
 
-func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64) ([]Models.Post, error) {
+func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64, areActive bool) (DTOs.Posts, error) {
 	var results = make([]Models.Post,0)
 	collection := pr.client.Database(pr.dbName).Collection(pr.colletionName)
 
@@ -136,10 +138,16 @@ func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64) ([]Models.Post, 
 	//findOptions.SetSort(map[string]int{"when": -1})
 	findOptions.SetSkip(setSkip)
 	findOptions.SetLimit(setLimit)
+	filter := bson.D{{}}
 
-	cur, err := collection.Find(context.TODO(), bson.D{{}}, findOptions)
+	if areActive {
+		filter = bson.D{{"status", "Active"}}
+	}
+
+	total, err := collection.CountDocuments(context.TODO(), filter)
+	cur, err := collection.Find(context.TODO(), filter, findOptions)
 	if err != nil {
-		return results, err
+		return DTOs.Posts{}, err
 	}
 	for cur.Next(context.TODO()) {
 
@@ -147,11 +155,39 @@ func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64) ([]Models.Post, 
 		var elem Models.Post
 		err := cur.Decode(&elem)
 		if err != nil {
-			return results, err
+			return DTOs.Posts{}, err
 		}
 
+        elem.Content = getFirstElementString(elem.Content, "p")
 		results = append(results, elem)
 	}
 
-	return results, nil
+	return DTOs.Posts{results, total}, nil
+}
+
+func getFirstElementString(str string, elem string) string {
+	start := fmt.Sprintf("<%s>", elem)
+	end := fmt.Sprintf("</%s>", elem)
+
+	s := strings.Index(str, strings.ToLower(start))
+	e := strings.Index(str, strings.ToLower(end))
+
+	if s >= 0 && e > 0 {
+		return str[s : e+len(end)]
+	}
+
+	s = strings.Index(str, strings.ToUpper(start))
+	e = strings.Index(str, strings.ToUpper(end))
+
+	if s >= 0 && e > 0 {
+		return str[s : e+len(end)]
+	}
+	strLen := len(str)
+
+	if strLen > 1000 {
+		strLen = 1000
+	}
+
+
+	return str[:strLen]
 }

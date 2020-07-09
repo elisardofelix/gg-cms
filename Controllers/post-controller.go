@@ -5,6 +5,7 @@ import (
 	"gg-cms/Services"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"time"
 )
 
@@ -27,7 +28,14 @@ func NewPostController(service Services.PostService) PostController {
 }
 
 func (pc *postController) FindAllActivePosts(ctx *gin.Context) {
-	posts, err := pc.service.FindAll(20, 0)
+	skip, _ :=  strconv.ParseInt(ctx.GetHeader("skip"), 10, 64)
+	limit, _ := strconv.ParseInt(ctx.GetHeader("limit"), 10, 64)
+
+	if limit == 0 {
+		limit = 20
+	}
+
+	posts, err := pc.service.FindAll(limit, skip, true)
 
 	if err == nil {
 		ctx.JSON(200, posts)
@@ -111,3 +119,4 @@ func (pc *postController) DeletePost(ctx *gin.Context) {
 		})
 	}
 }
+

@@ -6,6 +6,7 @@ import (
 	"gg-cms/Services"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"time"
 )
 
@@ -28,7 +29,14 @@ func NewUserController(service Services.UserService) UserController {
 }
 
 func (uc *userController) FindAllUsers(ctx *gin.Context) {
-	users, err := uc.service.FindAll(20, 0)
+	skip, _ :=  strconv.ParseInt(ctx.GetHeader("skip"), 10, 64)
+	limit, _ := strconv.ParseInt(ctx.GetHeader("limit"), 10, 64)
+
+	if limit == 0 {
+		limit = 20
+	}
+
+	users, err := uc.service.FindAll(limit, skip)
 
 	if err == nil {
 		ctx.JSON(200, users)
@@ -57,17 +65,21 @@ func (uc *userController) SaveUser(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&userIn)
 
 	if userIn.Password != userIn.RePasword || userIn.Password == "" {
-		ctx.JSON(500, gin.H{
+		ctx.JSON(400, gin.H{
 			"error": "Password and RePassword does not match.",
 		})
 		return
 	}
-	Services.EncodePassword(userIn.UserName, userIn.Password)
+
+	if userIn.Status == "" {
+		userIn.Status = "Active"
+	}
 
 	var user  = Models.User{
 		UserName: userIn.UserName,
-		Password: Services.EncodePassword(userIn.UserName, userIn.Password),
+		Password: userIn.Password,
 		Email: userIn.Email,
+		Status: userIn.Status,
 	}
 
 	if err != nil {
@@ -75,7 +87,6 @@ func (uc *userController) SaveUser(ctx *gin.Context) {
 			"error" : err.Error(),
 		})
 	} else {
-		user.Status = "Active"
 		user.CreatedDate = time.Now()
 		cClaims, _ := ctx.Get("jwtClaims")
 		tokenClaims := cClaims.(jwt.MapClaims)

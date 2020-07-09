@@ -47,7 +47,7 @@ func (service *loginService) Register(registration DTOs.Registration) (Models.Us
 	var user = Models.User{
 		UserName: registration.UserName,
 		Password: realPassword,
-		Status: "P",
+		Status: "PendingConfirmation",
 		Email: registration.Email,
 		CreatedBy:  registration.CreatedBy,
 		CreatedDate: time.Now(),

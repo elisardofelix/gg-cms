@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"gg-cms/Models"
-	"gg-cms/Services"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
@@ -14,12 +13,12 @@ import (
 
 func TestIntegrationLoginUserAuthorized(t *testing.T){
 
-	username := "user22"
+	username := "user25"
 	password := "112345678"
 
 	userToCreate := Models.User{
 		UserName: username,
-		Password: Services.EncodePassword(username, password),
+		Password: password,
 		Email: "blablabla2@gmail.com",
 		IsAdmin: true,
 		Status: "Active",
@@ -28,8 +27,6 @@ func TestIntegrationLoginUserAuthorized(t *testing.T){
 	}
 
 	userServiceTest.Save(userToCreate)
-
-
 
 	postPayload := fmt.Sprintf(`{ "userName" : "%s", "password":"%s" }`, username, password)
 	// Create a response recorder

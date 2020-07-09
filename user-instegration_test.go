@@ -239,11 +239,11 @@ func TestIntegrationGetAllUsers(t *testing.T){
 	// Create the service and process the above request.
 	r.ServeHTTP(w, req)
 
-	var data *[]DTOs.User
+	var data DTOs.Users
 	err = json.Unmarshal([]byte(w.Body.String()), &data)
 
 	// Test that the http status code is 200
-	if w.Code != 200 || len(*data) <= 0 {
+	if w.Code != 200 || len(data.Data) <= 0 || data.Total <= 0 {
 		fmt.Println("Error Request: not 200 : " + w.Body.String())
 		t.Fail()
 		return
