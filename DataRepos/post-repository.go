@@ -39,6 +39,14 @@ func NewPostRepo() PostRepo {
 			Options: options.Index().SetUnique(true),
 		}
 		collection.Indexes().CreateOne(context.TODO(), mod)
+
+		mod2 := mongo.IndexModel{
+			Keys: bson.M{
+				"createdDate": 1,
+			},
+		}
+		collection.Indexes().CreateOne(context.TODO(), mod2)
+
 	}
 
 	return &postRepo {
