@@ -65,7 +65,7 @@ func (uc *userController) SaveUser(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&userIn)
 
 	if userIn.Password != userIn.RePasword || userIn.Password == "" {
-		ctx.JSON(400, gin.H{
+		ctx.JSON(500, gin.H{
 			"error": "Password and RePassword does not match.",
 		})
 		return

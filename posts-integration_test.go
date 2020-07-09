@@ -26,7 +26,7 @@ func TestIntegrationCreatePostAuthorized(t *testing.T){
 
 
 	// Create a request to send to the above route
-	postPayload := `{"title": "test1", "content": "Content ...", "permaLink": "test1"}`
+	postPayload := `{"title": "test1", "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ornare arcu dui vivamus arcu felis bibendum. Amet dictum sit amet justo donec enim diam. Tellus mauris a diam maecenas sed enim. Tincidunt vitae semper quis lectus nulla. Diam in arcu cursus euismod quis. Odio ut enim blandit volutpat maecenas volutpat. Tempor nec feugiat nisl pretium fusce id velit ut tortor. Enim lobortis scelerisque fermentum dui faucibus in. Consectetur lorem donec massa sapien faucibus et molestie ac feugiat. Tellus mauris a diam maecenas sed enim. Enim sed faucibus turpis in eu mi bibendum neque. Lacus sed viverra tellus in hac. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Viverra nibh cras pulvinar mattis. Quis auctor elit sed vulputate mi sit amet. Amet nulla facilisi morbi tempus. Volutpat commodo sed egestas egestas fringilla. Amet nulla facilisi morbi tempus iaculis urna. Elementum integer enim neque volutpat ac tincidunt.", "permaLink": "test1"}`
 	req, err := http.NewRequest("POST", "/blog/post", strings.NewReader(postPayload))
 	req.Header = http.Header{}
 	req.Header.Add("Content-Type", "application/json")
@@ -68,7 +68,7 @@ func TestIntegrationUpdatePostAuthorized(t *testing.T){
 	postToCreate := Models.Post{
 		"",
 		"TitleTest",
-		"Content ...",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ornare arcu dui vivamus arcu felis bibendum. Amet dictum sit amet justo donec enim diam. Tellus mauris a diam maecenas sed enim. Tincidunt vitae semper quis lectus nulla. Diam in arcu cursus euismod quis. Odio ut enim blandit volutpat maecenas volutpat. Tempor nec feugiat nisl pretium fusce id velit ut tortor. Enim lobortis scelerisque fermentum dui faucibus in. Consectetur lorem donec massa sapien faucibus et molestie ac feugiat. Tellus mauris a diam maecenas sed enim. Enim sed faucibus turpis in eu mi bibendum neque. Lacus sed viverra tellus in hac. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Viverra nibh cras pulvinar mattis. Quis auctor elit sed vulputate mi sit amet. Amet nulla facilisi morbi tempus. Volutpat commodo sed egestas egestas fringilla. Amet nulla facilisi morbi tempus iaculis urna. Elementum integer enim neque volutpat ac tincidunt.",
 		"temp-update-test",
 		"Active",
 		time.Now(),

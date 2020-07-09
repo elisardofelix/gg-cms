@@ -2,6 +2,6 @@ package DTOs
 
 
 type Credentials struct {
-	UserName string `form:"userName" json:"userName"`
-	Password string `form:"password" json:"password"`
+	UserName string `form:"userName" json:"userName" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required"`
 }

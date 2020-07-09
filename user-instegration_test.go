@@ -33,6 +33,8 @@ func TestIntegrationCreateUserAuthorized(t *testing.T){
 		Password: "123456",
 		RePasword: "123456",
 		Email: "elisardofelix@gmail.com",
+		IsAdmin: true,
+		Status: "Active",
 	}
 
 	payload, err := json.Marshal(userToCreate)
@@ -54,7 +56,7 @@ func TestIntegrationCreateUserAuthorized(t *testing.T){
 
 	// Test that the http status code is 401 Unauthorized
 	if w.Code != 200{
-		fmt.Println("Error Request: not 200")
+		fmt.Println("Error Request: not 200 : " + w.Body.String())
 		t.Fail()
 		return
 	}
