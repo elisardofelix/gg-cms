@@ -180,6 +180,12 @@ func getFirstElementString(str string, elem string) string {
 	if s >= 0 && e > 0 {
 		return str[s : e+len(end)]
 	}
+	strLen := len(str)
 
-	return str[:1000]
+	if strLen > 1000 {
+		strLen = 1000
+	}
+
+
+	return str[:strLen]
 }

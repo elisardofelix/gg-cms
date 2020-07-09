@@ -76,7 +76,7 @@ func initializeRoutes(router *gin.Engine) {
 		loginRoutes.POST("/auth", loginController.Login)
 		loginRoutes.POST("/register", func(ctx *gin.Context){
 			ctx.JSON(500, gin.H {
-				"error" : "Register not implemented",
+				"error" : "Register not implemented yet",
 			})
 		})
 

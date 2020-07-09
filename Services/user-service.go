@@ -27,6 +27,8 @@ func NewUserService(repo DataRepos.UserRepo) UserService {
 }
 
 func (service *userService) Save(user Models.User) (DTOs.User, error) {
+	user.Password = EncodePassword(user.UserName, user.Password)
+
 	repoUser, err := service.userRepo.Insert(user)
 	return DTOs.User{
 		ID:          repoUser.ID,
