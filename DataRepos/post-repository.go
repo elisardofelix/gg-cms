@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"context"
 	"gg-cms/DB"
+	"gg-cms/DTOs"
 	"gg-cms/Models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -17,7 +18,7 @@ type PostRepo interface {
 	Update(post Models.Post) (Models.Post, error)
 	Delete(ID string) error
 	Get(permaLink string) (Models.Post, error)
-	GetAllActive(setLimit int64, setSkip int64, areActive bool) ([]Models.Post, error)
+	GetAllActive(setLimit int64, setSkip int64, areActive bool) (DTOs.Posts, error)
 }
 
 type postRepo struct {
@@ -127,7 +128,7 @@ func (pr *postRepo) Get(permaLink string) (Models.Post, error) {
 }
 
 
-func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64, areActive bool) ([]Models.Post, error) {
+func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64, areActive bool) (DTOs.Posts, error) {
 	var results = make([]Models.Post,0)
 	collection := pr.client.Database(pr.dbName).Collection(pr.colletionName)
 
@@ -143,9 +144,10 @@ func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64, areActive bool) 
 		filter = bson.D{{"status", "Active"}}
 	}
 
+	total, err := collection.CountDocuments(context.TODO(), filter)
 	cur, err := collection.Find(context.TODO(), filter, findOptions)
 	if err != nil {
-		return results, err
+		return DTOs.Posts{}, err
 	}
 	for cur.Next(context.TODO()) {
 
@@ -153,14 +155,14 @@ func (pr *postRepo) GetAllActive(setLimit int64, setSkip int64, areActive bool) 
 		var elem Models.Post
 		err := cur.Decode(&elem)
 		if err != nil {
-			return results, err
+			return DTOs.Posts{}, err
 		}
 
         elem.Content = getFirstElementString(elem.Content, "p")
 		results = append(results, elem)
 	}
 
-	return results, nil
+	return DTOs.Posts{results, total}, nil
 }
 
 func getFirstElementString(str string, elem string) string {

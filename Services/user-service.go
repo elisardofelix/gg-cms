@@ -1,10 +1,10 @@
 package Services
 
 import (
+	"context"
 	"gg-cms/DTOs"
 	"gg-cms/DataRepos"
 	"gg-cms/Models"
-	"context"
 )
 
 type UserService interface {
@@ -12,7 +12,7 @@ type UserService interface {
 	Update(user Models.User) (DTOs.User, error)
 	Delete(ID string) error
 	Find(username string) (DTOs.User, error)
-	FindAll(limit int64, skip int64) ([]DTOs.User, error)
+	FindAll(limit int64, skip int64) (DTOs.Users, error)
 }
 
 type userService struct {
@@ -72,12 +72,13 @@ func (service *userService) Find(username string) (DTOs.User, error) {
 	}, err
 }
 
-func (service *userService) FindAll(limit int64, skip int64) ([]DTOs.User, error) {
+func (service *userService) FindAll(limit int64, skip int64) (DTOs.Users, error) {
 	var results = make([]DTOs.User, 0)
-	cur, err := service.userRepo.GetAllUsers(limit, skip)
+
+	cur, total, err := service.userRepo.GetAllUsers(limit, skip)
 
 	if err != nil {
-		return results, err
+		return DTOs.Users{}, err
 	}
 	for cur.Next(context.TODO()) {
 
@@ -85,12 +86,12 @@ func (service *userService) FindAll(limit int64, skip int64) ([]DTOs.User, error
 		var elem DTOs.User
 		err := cur.Decode(&elem)
 		if err != nil {
-			return results, err
+			return DTOs.Users{}, err
 		}
 
 		results = append(results, elem)
 	}
 
-	return results, nil
+	return DTOs.Users{ results, total}, nil
 
 }

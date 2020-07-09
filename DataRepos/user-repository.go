@@ -16,7 +16,7 @@ type UserRepo interface {
 	Update(user Models.User) (Models.User, error)
 	Delete(ID string) error
 	Get(username string) (Models.User, error)
-	GetAllUsers(setLimit int64, setSkip int64) (*mongo.Cursor, error)
+	GetAllUsers(setLimit int64, setSkip int64) (*mongo.Cursor, int64, error)
 	ExistsCredential(username string, password string) (bool, bool, error)
 	ExistsAny(active bool) (bool, error)
 }
@@ -122,7 +122,7 @@ func (ur *userRepo) Get(username string) (Models.User, error) {
 }
 
 
-func (ur *userRepo) GetAllUsers(setLimit int64, setSkip int64) (*mongo.Cursor, error) {
+func (ur *userRepo) GetAllUsers(setLimit int64, setSkip int64) (*mongo.Cursor, int64, error) {
 	collection := ur.client.Database(ur.dbName).Collection(ur.colletionName)
 
 	// Pass these options to the Find method
@@ -133,7 +133,9 @@ func (ur *userRepo) GetAllUsers(setLimit int64, setSkip int64) (*mongo.Cursor, e
 	findOptions.SetLimit(setLimit)
 
 	cur, err := collection.Find(context.TODO(), bson.D{{}}, findOptions)
-	return cur, err
+	total, err := collection.CountDocuments(context.TODO(), bson.D{{}})
+
+	return cur, total, err
 }
 
 
