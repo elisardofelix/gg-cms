@@ -9,9 +9,11 @@ Here is a list of the features in the current version **V0.1**:
 * JWT (Json Web Token) Implementation for security
 
 **Note:**
-**This is only the Back-End of the complete project, please click in the link below to go to the Front-End repository:**
+**This is only the Back-End of the complete project, please click in the link below to go to the Front-End repository and demo page link:**
 
-[gg-cms-front-end](https://github.com/elisardofelix/gg-cms-front-end/blob/master)
+* [gg-cms-front-end](https://github.com/elisardofelix/gg-cms-front-end)
+* [Demo Page](https://gg-cms-demo.devland.bid/)
+
 
 ## Implementation GG-CMS
 For implementing this back-end you need to have the following considerations:
