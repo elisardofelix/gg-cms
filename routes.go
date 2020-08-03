@@ -46,7 +46,7 @@ func initializeRoutes(router *gin.Engine) {
 	// Handle the index route
 	router.GET("/", func(ctx *gin.Context){
 		ctx.JSON(200, gin.H {
-			"menssage" : "OK Im Here, second change!!",
+			"menssage" : "OK Im Here, Third change!!",
 		})
 	})
 
