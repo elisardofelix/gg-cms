@@ -2,7 +2,7 @@ FROM golang
 
 ENV PORT=8000 \
     GGCMSDBString=mongodb://192.168.50.15:27017 \
-    GGCMSDBProd=ggcms \
+    GGCMSDBProd=gg-cms \
     test=test \
     ESPECIAL_USER=eli:123456
 
